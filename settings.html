@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0">
+
+<title>AniVerse - Settings</title>
+
+<link
+    rel="stylesheet"
+    href="style.css">
+
+
+<style>
+
+.settings-page{
+    max-width:700px;
+    margin:auto;
+    padding:22px 15px 40px;
+}
+
+.page-title{
+    font-size:23px;
+    font-weight:900;
+}
+
+.page-subtitle{
+    color:#85868e;
+    font-size:11px;
+    margin-top:6px;
+    margin-bottom:22px;
+}
+
+.settings-box{
+    background:#131419;
+    border:1px solid #202129;
+    border-radius:9px;
+    overflow:hidden;
+    margin-bottom:18px;
+}
+
+.settings-heading{
+    padding:14px 15px;
+    font-size:14px;
+    font-weight:bold;
+    border-bottom:1px solid #202129;
+}
+
+.setting{
+    min-height:60px;
+    padding:12px 15px;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    border-bottom:1px solid #202129;
+}
+
+.setting:last-child{
+    border-bottom:0;
+}
+
+.setting-info{
+    flex:1;
+}
+
+.setting-title{
+    font-size:12px;
+    font-weight:bold;
+}
+
+.setting-text{
+    color:#777983;
+    font-size:9px;
+    margin-top:4px;
+    line-height:15px;
+}
+
+.clear-btn{
+    border:1px solid #3a3030;
+    background:#211719;
+    color:#ff9292;
+    padding:8px 10px;
+    border-radius:6px;
+    font-size:10px;
+}
+
+.about{
+    color:#777983;
+    font-size:10px;
+    line-height:18px;
+    padding:15px;
+}
+
+.back-home{
+    display:inline-block;
+    margin-top:5px;
+    padding:10px 15px;
+    background:#9b5cff;
+    color:#fff;
+    text-decoration:none;
+    border-radius:7px;
+    font-size:11px;
+    font-weight:bold;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- HEADER -->
+
+<header>
+
+    <a
+        href="index.html"
+        class="back">
+
+        &#8592;
+
+    </a>
+
+
+    <div class="logo">
+        Ani<span>Verse</span>
+    </div>
+
+</header>
+
+
+<main class="settings-page">
+
+
+    <h1 class="page-title">
+        Settings
+    </h1>
+
+
+    <p class="page-subtitle">
+        Manage your AniVerse preferences
+    </p>
+
+
+    <!-- GENERAL -->
+
+    <div class="settings-box">
+
+        <div class="settings-heading">
+            General
+        </div>
+
+
+        <div class="setting">
+
+            <div class="setting-info">
+
+                <div class="setting-title">
+                    App Name
+                </div>
+
+                <div class="setting-text">
+                    AniVerse
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="setting">
+
+            <div class="setting-info">
+
+                <div class="setting-title">
+                    Theme
+                </div>
+
+                <div class="setting-text">
+                    Dark
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- STORAGE -->
+
+    <div class="settings-box">
+
+        <div class="settings-heading">
+            Storage
+        </div>
+
+
+        <div class="setting">
+
+            <div class="setting-info">
+
+                <div class="setting-title">
+                    My List
+                </div>
+
+                <div class="setting-text">
+                    Saved anime are stored on this device.
+                </div>
+
+            </div>
+
+
+            <button
+                id="clearList"
+                class="clear-btn">
+
+                Clear
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- ABOUT -->
+
+    <div class="settings-box">
+
+        <div class="settings-heading">
+            About AniVerse
+        </div>
+
+
+        <div class="about">
+
+            AniVerse is a personal anime browsing
+            project.
+
+            <br><br>
+
+            Anime information is loaded from a
+            public anime data API.
+
+            <br><br>
+
+            Version 1.0
+
+        </div>
+
+    </div>
+
+
+    <a
+        href="index.html"
+        class="back-home">
+
+        &#8592; Back to Home
+
+    </a>
+
+
+</main>
+
+
+<script>
+
+const clearButton =
+    document.getElementById(
+        "clearList"
+    );
+
+
+clearButton.addEventListener(
+    "click",
+    function(){
+
+        const confirmClear =
+            confirm(
+                "Remove all anime from My List?"
+            );
+
+
+        if(!confirmClear){
+            return;
+        }
+
+
+        const keys = [];
+
+
+        for(
+            let i = 0;
+            i < localStorage.length;
+            i++
+        ){
+
+            const key =
+                localStorage.key(i);
+
+
+            if(
+                key &&
+                key.startsWith(
+                    "aniverse_favorite_"
+                )
+            ){
+
+                keys.push(key);
+
+            }
+
+        }
+
+
+        keys.forEach(
+            function(key){
+
+                localStorage.removeItem(
+                    key
+                );
+
+            }
+        );
+
+
+        alert(
+            "My List cleared."
+        );
+
+    }
+);
+
+</script>
+
+
+</body>
+
+</html>
