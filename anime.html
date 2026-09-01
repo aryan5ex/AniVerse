@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0">
+
+<title>AniVerse - Anime</title>
+
+<link
+    rel="stylesheet"
+    href="style.css">
+
+
+<style>
+
+.anime-hero{
+    position:relative;
+    min-height:390px;
+    overflow:hidden;
+    background:#111217;
+}
+
+.hero-bg{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    opacity:.28;
+    filter:blur(5px);
+    transform:scale(1.08);
+}
+
+.hero-overlay{
+    position:absolute;
+    inset:0;
+    background:
+    linear-gradient(
+        to top,
+        #08090d 5%,
+        rgba(8,9,13,.75) 55%,
+        rgba(8,9,13,.15)
+    );
+}
+
+.hero-content{
+    position:relative;
+    z-index:2;
+    min-height:390px;
+    display:flex;
+    align-items:flex-end;
+    gap:16px;
+    padding:25px 15px;
+}
+
+.poster-wrap{
+    flex:0 0 125px;
+}
+
+.main-poster{
+    width:125px;
+    height:180px;
+    object-fit:cover;
+    border-radius:8px;
+    background:#202127;
+    display:block;
+}
+
+.info{
+    flex:1;
+}
+
+.anime-title{
+    font-size:22px;
+    font-weight:900;
+    line-height:28px;
+}
+
+.japanese{
+    color:#8d8e96;
+    font-size:11px;
+    margin-top:5px;
+}
+
+.anime-meta{
+    color:#aaaab2;
+    font-size:11px;
+    line-height:18px;
+    margin-top:10px;
+}
+
+.buttons{
+    display:flex;
+    gap:9px;
+    margin:18px 0;
+}
+
+.watch-btn,
+.favorite-btn{
+    border:0;
+    border-radius:7px;
+    padding:11px 15px;
+    font-size:12px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+.watch-btn{
+    background:#9b5cff;
+    color:#fff;
+}
+
+.favorite-btn{
+    background:#191a21;
+    color:#ddd;
+    border:1px solid #292a32;
+}
+
+.box{
+    background:#131419;
+    border:1px solid #202129;
+    border-radius:9px;
+    padding:14px;
+    margin-bottom:20px;
+}
+
+.box h2{
+    font-size:16px;
+    margin-bottom:9px;
+}
+
+.description{
+    color:#a4a5ad;
+    font-size:12px;
+    line-height:19px;
+}
+
+.details{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+}
+
+.detail{
+    background:#101116;
+    border-radius:7px;
+    padding:10px;
+}
+
+.detail-label{
+    color:#777983;
+    font-size:9px;
+    margin-bottom:5px;
+}
+
+.detail-value{
+    color:#ddd;
+    font-size:11px;
+}
+
+.genres{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+}
+
+.genre{
+    background:#1a1923;
+    border:1px solid #2a2639;
+    color:#b993ff;
+    padding:6px 9px;
+    border-radius:5px;
+    font-size:10px;
+}
+
+.page-loading{
+    text-align:center;
+    padding:50px 15px;
+    color:#85868e;
+    font-size:13px;
+}
+
+.page-error{
+    text-align:center;
+    padding:50px 15px;
+    color:#ff8b8b;
+    font-size:13px;
+}
+
+@media(min-width:700px){
+
+    .anime-hero{
+        max-width:1100px;
+        margin:auto;
+    }
+
+    .hero-content{
+        min-height:500px;
+    }
+
+    .poster-wrap{
+        flex-basis:180px;
+    }
+
+    .main-poster{
+        width:180px;
+        height:260px;
+    }
+
+    .anime-title{
+        font-size:30px;
+        line-height:38px;
+    }
+
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- HEADER -->
+
+<header>
+
+    <a
+        href="index.html"
+        class="back">
+
+        &#8592;
+
+    </a>
+
+    <div class="logo">
+        Ani<span>Verse</span>
+    </div>
+
+</header>
+
+
+<!-- LOADING -->
+
+<div
+    id="loading"
+    class="page-loading">
+
+    Loading anime...
+
+</div>
+
+
+<!-- ANIME PAGE -->
+
+<main
+    id="animePage"
+    style="display:none;">
+
+
+    <div class="anime-hero">
+
+        <img
+            id="heroBg"
+            class="hero-bg"
+            src=""
+            alt="">
+
+
+        <div class="hero-overlay"></div>
+
+
+        <div class="hero-content">
+
+
+            <div class="poster-wrap">
+
+                <img
+                    id="poster"
+                    class="main-poster"
+                    src=""
+                    alt="">
+
+            </div>
+
+
+            <div class="info">
+
+                <h1
+                    id="title"
+                    class="anime-title">
+
+                </h1>
+
+
+                <div
+                    id="japanese"
+                    class="japanese">
+
+                </div>
+
+
+                <div
+                    id="meta"
+                    class="anime-meta">
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="content">
+
+
+        <!-- BUTTONS -->
+
+        <div class="buttons">
+
+            <button
+                id="watchButton"
+                class="watch-btn">
+
+                ▶ WATCH
+
+            </button>
+
+
+            <button
+                id="favoriteButton"
+                class="favorite-btn">
+
+                ♡ ADD TO LIST
+
+            </button>
+
+        </div>
+
+
+        <!-- OVERVIEW -->
+
+        <div class="box">
+
+            <h2>
+                Overview
+            </h2>
+
+
+            <p
+                id="description"
+                class="description">
+
+            </p>
+
+        </div>
+
+
+        <!-- DETAILS -->
+
+        <div class="box">
+
+            <h2>
+                Details
+            </h2>
+
+
+            <div class="details">
+
+
+                <div class="detail">
+
+                    <div class="detail-label">
+                        TYPE
+                    </div>
+
+                    <div
+                        id="type"
+                        class="detail-value">
+
+                    </div>
+
+                </div>
+
+
+                <div class="detail">
+
+                    <div class="detail-label">
+                        EPISODES
+                    </div>
+
+                    <div
+                        id="episodes"
+                        class="detail-value">
+
+                    </div>
+
+                </div>
+
+
+                <div class="detail">
+
+                    <div class="detail-label">
+                        STATUS
+                    </div>
+
+                    <div
+                        id="status"
+                        class="detail-value">
+
+                    </div>
+
+                </div>
+
+
+                <div class="detail">
+
+                    <div class="detail-label">
+                        SCORE
+                    </div>
+
+                    <div
+                        id="score"
+                        class="detail-value">
+
+                    </div>
+
+                </div>
+
+
+                <div class="detail">
+
+                    <div class="detail-label">
+                        YEAR
+                    </div>
+
+                    <div
+                        id="year"
+                        class="detail-value">
+
+                    </div>
+
+                </div>
+
+
+                <div class="detail">
+
+                    <div class="detail-label">
+                        RATING
+                    </div>
+
+                    <div
+                        id="rating"
+                        class="detail-value">
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- GENRES -->
+
+        <div class="box">
+
+            <h2>
+                Genres
+            </h2>
+
+
+            <div
+                id="genres"
+                class="genres">
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+</main>
+
+
+<script>
+
+const params =
+    new URLSearchParams(
+        window.location.search
+    );
+
+const animeId =
+    params.get("id");
+
+
+const loading =
+    document.getElementById(
+        "loading"
+    );
+
+const animePage =
+    document.getElementById(
+        "animePage"
+    );
+
+
+/* LOAD ANIME */
+
+async function loadAnime(){
+
+    if(!animeId){
+
+        showError(
+            "Anime ID nahi mila."
+        );
+
+        return;
+
+    }
+
+
+    try{
+
+        const response =
+            await fetch(
+                "https://api.jikan.moe/v4/anime/" +
+                animeId +
+                "/full"
+            );
+
+
+        if(!response.ok){
+
+            throw new Error(
+                "API Error"
+            );
+
+        }
+
+
+        const result =
+            await response.json();
+
+
+        displayAnime(
+            result.data
+        );
+
+
+    }catch(error){
+
+        console.log(error);
+
+        showError(
+            "Anime information load nahi ho paayi."
+        );
+
+    }
+
+}
+
+
+/* DISPLAY */
+
+function displayAnime(anime){
+
+    loading.style.display =
+        "none";
+
+    animePage.style.display =
+        "block";
+
+
+    const image =
+        anime.images?.jpg
+        ?.large_image_url ||
+        anime.images?.jpg
+        ?.image_url ||
+        "";
+
+
+    document.getElementById(
+        "heroBg"
+    ).src = image;
+
+
+    document.getElementById(
+        "poster"
+    ).src = image;
+
+
+    document.getElementById(
+        "title"
+    ).textContent =
+        anime.title ||
+        "Unknown Anime";
+
+
+    document.getElementById(
+        "japanese"
+    ).textContent =
+        anime.title_japanese ||
+        "";
+
+
+    document.getElementById(
+        "meta"
+    ).textContent =
+        (anime.type || "TV") +
+        " • " +
+        (anime.score
+            ? "★ " + anime.score
+            : "No rating") +
+        " • " +
+        (anime.status || "");
+
+
+    document.getElementById(
+        "description"
+    ).textContent =
+        anime.synopsis ||
+        "No description available.";
+
+
+    document.getElementById(
+        "type"
+    ).textContent =
+        anime.type ||
+        "Unknown";
+
+
+    document.getElementById(
+        "episodes"
+    ).textContent =
+        anime.episodes ||
+        "Unknown";
+
+
+    document.getElementById(
+        "status"
+    ).textContent =
+        anime.status ||
+        "Unknown";
+
+
+    document.getElementById(
+        "score"
+    ).textContent =
+        anime.score
+        ? "★ " + anime.score
+        : "N/A";
+
+
+    document.getElementById(
+        "year"
+    ).textContent =
+        anime.year ||
+        anime.aired?.from?.slice(0,4) ||
+        "Unknown";
+
+
+    document.getElementById(
+        "rating"
+    ).textContent =
+        anime.rating ||
+        "Unknown";
+
+
+    const genres =
+        document.getElementById(
+            "genres"
+        );
+
+
+    genres.innerHTML = "";
+
+
+    (anime.genres || [])
+    .forEach(
+        function(item){
+
+            const tag =
+                document.createElement(
+                    "span"
+                );
+
+            tag.className =
+                "genre";
+
+            tag.textContent =
+                item.name;
+
+            genres.appendChild(
+                tag
+            );
+
+        }
+    );
+
+
+    document.title =
+        "AniVerse - " +
+        anime.title;
+
+
+    setupButtons(
+        anime.mal_id
+    );
+
+}
+
+
+/* BUTTONS */
+
+function setupButtons(id){
+
+    const watchButton =
+        document.getElementById(
+            "watchButton"
+        );
+
+
+    const favoriteButton =
+        document.getElementById(
+            "favoriteButton"
+        );
+
+
+    watchButton.onclick =
+        function(){
+
+            location.href =
+                "watch.html?id=" +
+                id;
+
+        };
+
+
+    function updateFavorite(){
+
+        if(
+            localStorage.getItem(
+                "aniverse_favorite_" +
+                id
+            )
+        ){
+
+            favoriteButton.textContent =
+                "♥ IN MY LIST";
+
+        }else{
+
+            favoriteButton.textContent =
+                "♡ ADD TO LIST";
+
+        }
+
+    }
+
+
+    favoriteButton.onclick =
+        function(){
+
+            const key =
+                "aniverse_favorite_" +
+                id;
+
+
+            if(
+                localStorage.getItem(key)
+            ){
+
+                localStorage.removeItem(
+                    key
+                );
+
+            }else{
+
+                localStorage.setItem(
+                    key,
+                    "true"
+                );
+
+            }
+
+
+            updateFavorite();
+
+        };
+
+
+    updateFavorite();
+
+}
+
+
+/* ERROR */
+
+function showError(message){
+
+    loading.innerHTML =
+        message;
+
+}
+
+
+/* START */
+
+loadAnime();
+
+</script>
+
+
+</body>
+
+</html>
