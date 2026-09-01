@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0">
+
+<title>AniVerse - My List</title>
+
+<link
+    rel="stylesheet"
+    href="style.css">
+
+
+<style>
+
+.page{
+    max-width:1100px;
+    margin:auto;
+    padding:22px 15px 40px;
+}
+
+.page-title{
+    font-size:23px;
+    font-weight:900;
+}
+
+.page-subtitle{
+    color:#85868e;
+    font-size:11px;
+    margin-top:6px;
+    margin-bottom:22px;
+}
+
+.empty{
+    text-align:center;
+    background:#131419;
+    border:1px solid #202129;
+    border-radius:9px;
+    padding:45px 20px;
+}
+
+.empty-icon{
+    font-size:38px;
+    margin-bottom:12px;
+}
+
+.empty-title{
+    font-size:16px;
+    font-weight:bold;
+}
+
+.empty-text{
+    color:#777983;
+    font-size:11px;
+    margin-top:7px;
+    line-height:18px;
+}
+
+.home-btn{
+    display:inline-block;
+    margin-top:18px;
+    padding:10px 15px;
+    background:#9b5cff;
+    color:white;
+    text-decoration:none;
+    border-radius:7px;
+    font-size:11px;
+    font-weight:bold;
+}
+
+.remove{
+    margin-top:8px;
+    width:100%;
+    height:30px;
+    border:1px solid #292a32;
+    border-radius:5px;
+    background:#18191f;
+    color:#999;
+    font-size:10px;
+}
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<!-- HEADER -->
+
+<header>
+
+    <a
+        href="index.html"
+        class="back">
+
+        &#8592;
+
+    </a>
+
+    <div class="logo">
+        Ani<span>Verse</span>
+    </div>
+
+</header>
+
+
+<main class="page">
+
+
+    <h1 class="page-title">
+        My List
+    </h1>
+
+
+    <p class="page-subtitle">
+        Your saved anime
+    </p>
+
+
+    <div
+        id="favorites"
+        class="grid">
+
+    </div>
+
+
+</main>
+
+
+<script>
+
+const container =
+    document.getElementById(
+        "favorites"
+    );
+
+
+/* =========================
+   GET FAVORITES
+========================= */
+
+function getFavorites(){
+
+    const favorites = [];
+
+
+    for(
+        let i = 0;
+        i < localStorage.length;
+        i++
+    ){
+
+        const key =
+            localStorage.key(i);
+
+
+        if(
+            key &&
+            key.startsWith(
+                "aniverse_favorite_"
+            )
+        ){
+
+            const id =
+                key.replace(
+                    "aniverse_favorite_",
+                    ""
+                );
+
+
+            favorites.push(id);
+
+        }
+
+    }
+
+
+    return favorites;
+
+}
+
+
+/* =========================
+   LOAD FAVORITES
+========================= */
+
+async function loadFavorites(){
+
+    const ids =
+        getFavorites();
+
+
+    if(ids.length === 0){
+
+        showEmpty();
+
+        return;
+
+    }
+
+
+    container.innerHTML =
+        '<div class="loading">' +
+        'Loading your list...' +
+        '</div>';
+
+
+    const animeList = [];
+
+
+    for(
+        const id of ids
+    ){
+
+        try{
+
+            const response =
+                await fetch(
+                    "https://api.jikan.moe/v4/anime/" +
+                    id
+                );
+
+
+            if(!response.ok){
+                continue;
+            }
+
+
+            const result =
+                await response.json();
+
+
+            if(result.data){
+
+                animeList.push(
+                    result.data
+                );
+
+            }
+
+
+        }catch(error){
+
+            console.log(error);
+
+        }
+
+    }
+
+
+    if(
+        animeList.length === 0
+    ){
+
+        showEmpty();
+
+        return;
+
+    }
+
+
+    displayFavorites(
+        animeList
+    );
+
+}
+
+
+/* =========================
+   DISPLAY
+========================= */
+
+function displayFavorites(
+    animeList
+){
+
+    container.innerHTML =
+        "";
+
+
+    animeList.forEach(
+        function(anime){
+
+            const card =
+                document.createElement(
+                    "div"
+                );
+
+
+            card.className =
+                "card";
+
+
+            const link =
+                document.createElement(
+                    "a"
+                );
+
+
+            link.href =
+                "anime.html?id=" +
+                anime.mal_id;
+
+
+            link.style.textDecoration =
+                "none";
+
+            link.style.color =
+                "white";
+
+
+            const image =
+                document.createElement(
+                    "img"
+                );
+
+
+            image.className =
+                "poster";
+
+
+            image.src =
+                anime.images?.jpg
+                ?.large_image_url ||
+                anime.images?.jpg
+                ?.image_url ||
+                "";
+
+
+            image.alt =
+                anime.title ||
+                "Anime";
+
+
+            const info =
+                document.createElement(
+                    "div"
+                );
+
+
+            info.className =
+                "card-info";
+
+
+            const title =
+                document.createElement(
+                    "div"
+                );
+
+
+            title.className =
+                "card-title";
+
+
+            title.textContent =
+                anime.title ||
+                "Unknown Anime";
+
+
+            const meta =
+                document.createElement(
+                    "div"
+                );
+
+
+            meta.className =
+                "meta";
+
+
+            meta.textContent =
+                (anime.type || "TV") +
+                " • " +
+                (anime.episodes || "?") +
+                " EP";
+
+
+            info.appendChild(
+                title
+            );
+
+            info.appendChild(
+                meta
+            );
+
+
+            link.appendChild(
+                image
+            );
+
+            link.appendChild(
+                info
+            );
+
+
+            const remove =
+                document.createElement(
+                    "button"
+                );
+
+
+            remove.className =
+                "remove";
+
+
+            remove.textContent =
+                "Remove from My List";
+
+
+            remove.onclick =
+                function(){
+
+                    localStorage.removeItem(
+                        "aniverse_favorite_" +
+                        anime.mal_id
+                    );
+
+
+                    loadFavorites();
+
+                };
+
+
+            card.appendChild(
+                link
+            );
+
+            card.appendChild(
+                remove
+            );
+
+
+            container.appendChild(
+                card
+            );
+
+        }
+    );
+
+}
+
+
+/* =========================
+   EMPTY
+========================= */
+
+function showEmpty(){
+
+    container.innerHTML =
+
+        '<div class="empty">' +
+
+        '<div class="empty-icon">♡</div>' +
+
+        '<div class="empty-title">' +
+        'Your list is empty' +
+        '</div>' +
+
+        '<div class="empty-text">' +
+        'Open an anime and tap ' +
+        '"Add to List" to save it here.' +
+        '</div>' +
+
+        '<a href="index.html" ' +
+        'class="home-btn">' +
+        'Browse Anime' +
+        '</a>' +
+
+        '</div>';
+
+}
+
+
+/* =========================
+   START
+========================= */
+
+loadFavorites();
+
+</script>
+
+
+</body>
+
+</html>
